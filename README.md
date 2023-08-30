@@ -49,3 +49,37 @@ Vi genomförde en säkerhetsgranskning med `npm audit` och identifierade följan
 ### Lösning
 
 - Vi löste alla problemen genom att köra `npm audit fix`.
+
+## Åtgärder för att starta appen
+
+### Backend
+
+- **Steg 1:** Försök starta upp app.js och analysera och lokalisera problemet.
+- **Steg 2:** Använde oss av "Optional Chaining" för att applikationen inte skulle krascha på raden med felet.
+- **Steg 3:** Loggade ut resultatet och lokaliserade felet.
+
+```  "RESPONSE": {
+    "RESULT": [
+      {
+        "ERROR": {
+          "SOURCE": "Security",
+          "MESSAGE": "Invalid authentication"
+        }
+      }
+    ]
+  }
+```
+- **Steg 4:** Skapade API-nyckel på Trafikverket och lade in nyckeln i en dotENV fil i backend.
+- **Steg 5:** Starta backend med `node app.js` och sedan gå till localhost:1337 för kontrollera att uppstart lyckades.
+
+### Frontend
+- **Steg 1:** python -m http.server 9000 i Frontend foldern.
+- **Steg 2:** Använda sig av exploratory testing för att lokalisera problem.
+- **Steg 3:** Kolla Backendserverns felmeddelande.
+- **Steg 4:** Kontrollerade DBn och table "Tickets" finns ej.
+- **Steg 5:** Injicerade migrate.sql in i databasen.
+
+
+## Val av frontend ramverk
+
+- Vi kollade igenom materialet under [/frontend](https://jsramverk.se/frontend) och gjorde som John Papa och gick på magkänslan. Detta gjorde att vi valde Vue.js då vi föredrar JS i vår html.

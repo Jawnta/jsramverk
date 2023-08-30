@@ -19,8 +19,12 @@ async function fetchTrainPositions(io) {
         }
     )
     const result = await response.json()
-    const sseurl = result.RESPONSE.RESULT[0].INFO.SSEURL
-
+    const sseurl = result?.RESPONSE?.RESULT?.[0]?.INFO?.SSEURL;
+    // If sseurl is undefined or null, log the error and exit early
+    if (!sseurl) {
+        console.error("SSEURL not found in the result object:", JSON.stringify(result, null, 2));
+        return;
+    }
     const eventSource = new EventSource(sseurl)
 
     eventSource.onopen = function() {
