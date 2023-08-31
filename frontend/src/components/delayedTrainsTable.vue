@@ -30,27 +30,36 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
-  
+  import { useRoute, useRouter } from 'vue-router';
+  import {useTrainStore } from '../stores/train.js';
+  const router = useRouter();
+  const trainStore = useTrainStore();
+
   const delayedTrains = ref([]);
   onMounted(() => {
     fetchDelayedTrains();
   });
-  
-  async function fetchDelayedTrains() {
+  const fetchDelayedTrains = async () => {
     const response = await fetch("http://localhost:1337/delayed");
     const result = await response.json();
     delayedTrains.value = result.data;
   }
   
-  function computeDelay(item) {
+  const computeDelay = (item) => {
     let advertised = new Date(item.AdvertisedTimeAtLocation);
     let estimated = new Date(item.EstimatedTimeAtLocation);
     const diff = Math.abs(estimated - advertised);
     return Math.floor(diff / (1000 * 60)) + " minuter";
   }
-  
-  function openTicketView(train) {
+  const openTicketView = (train) => {
+    
+    trainStore.setTrain(train)
     // Handle opening the ticket view, either with Vue Router or with a modal
+    console.log("Testing Route.", train)
+    router.push({
+        name: 'details',
+        params: { trainNumber: train.OperationalTrainNumber },
+      });
   }
   </script>
   
