@@ -1,5 +1,5 @@
 <template>
-    <div id="container">
+    <div>
       <div class="delayed">
         <h1>Försenade tåg</h1>
         <table>
@@ -57,22 +57,11 @@
   <style scoped>
   /* Styles */
 
-  #container {
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-  }
   
   .delayed {
-      height: 100vh;
-      width: 40vw;
-      overflow: none;
+    max-height: 95vh;
+      overflow: scroll;
       background-color: white;
-  }
-  
-  .map {
-      height: 100vh;
-      width: 60vw;
   }
   
   .delayed-trains {

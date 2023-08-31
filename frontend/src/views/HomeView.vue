@@ -1,38 +1,40 @@
 <template>
-  <div class="wrapper"> 
+  <div class="wrapper">
     <div class="trainList">
       <trainsTable />
     </div>
+
     <div class="map">
       <mapComponentVue />
     </div>
 
-
-
-</div>
+  </div>
 </template>
 
 <script setup>
-  import mapComponentVue from '../components/mapComponent.vue'
-  import trainsTable from '../components/trainsTable.vue'
-  import { ref } from 'vue'
+import mapComponentVue from '../components/mapComponent.vue'
+import trainsTable from '../components/delayedTrainsTable.vue'
+
 </script>
 
 <style scoped>
 .wrapper {
   display: flex;
   flex-flow: row;
-  text-align: center;
-}
-.map {
-  display: flex;
-  height: auto;
+  text-align: left;
+  height: 95vh;
   width: 100%;
-  padding-left: 5px;
-}
-.trainList {
-  width: 40%;
-  padding-right: 5px;
+  justify-content: space-between;
 }
 
+.map {
+  margin: 5px;
+  height: 98vh;
+  width: 68%;
+}
+
+.trainList {
+  width: 30%;
+
+}
 </style>
