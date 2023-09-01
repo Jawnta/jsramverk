@@ -4,7 +4,6 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-
 const fetchTrainPositions = require('./models/trains.js')
 const delayed = require('./routes/delayed.js');
 const tickets = require('./routes/tickets.js');
@@ -27,7 +26,6 @@ const io = require("socket.io")(httpServer, {
     methods: ["GET", "POST"]
   }
 });
-
 const port = 1337
 
 app.get('/', (req, res) => {

@@ -83,7 +83,7 @@ const fetchTickets = () => {
         .then(response => response.json())
         .then(result => {
             tickets.value = result.data;
-            const lastId = tickets.value[1] ? tickets.value[1].id : 0;
+            const lastId = tickets.value[1] ? tickets.value[1]._id : 0;
             newTicketId.value = lastId + 1;
         });
 };

@@ -2,11 +2,11 @@ const database = require('../db/database.js');
 
 const tickets = {
     getTickets: async function getTickets(req, res){
-        var db = await database.openDb();
+        const db = await database.openDb();
+        const collection = db.collection('tickets');
 
-        var allTickets = await db.all(`SELECT *, ROWID as id FROM tickets ORDER BY ROWID DESC`);
-
-        await db.close();
+        // Fetch all tickets and sort them by their insertion order (assuming they're inserted in order)
+        const allTickets = await collection.find({}).sort({_id: -1}).toArray();
 
         return res.json({
             data: allTickets
@@ -14,23 +14,21 @@ const tickets = {
     },
 
     createTicket: async function createTicket(req, res){
-        var db = await database.openDb();
+        const db = await database.openDb();
+        const collection = db.collection('tickets');
 
-        const result = await db.run(
-            'INSERT INTO tickets (code, trainnumber, traindate) VALUES (?, ?, ?)',
-            req.body.code,
-            req.body.trainnumber,
-            req.body.traindate,
-        );
+        const ticket = {
+            code: req.body.code,
+            trainnumber: req.body.trainnumber,
+            traindate: req.body.traindate
+        };
 
-        await db.close();
+        const result = await collection.insertOne(ticket);
 
         return res.json({
             data: {
-                id: result.lastID,
-                code: req.body.code,
-                trainnumber: req.body.trainnumber,
-                traindate: req.body.traindate,
+                id: result.insertedId,
+                ...ticket
             }
         });
     }
