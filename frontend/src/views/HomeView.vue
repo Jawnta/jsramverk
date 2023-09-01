@@ -1,11 +1,11 @@
 <template>
   <div class="wrapper">
     <div class="trainList">
-      <trainsTable />
+      <trainsTable data-testid="trainsTableComponent" />
     </div>
 
     <div class="map">
-      <mapComponentVue />
+      <mapComponentVue data-testid="mapComponentVue"/>
     </div>
 
   </div>
