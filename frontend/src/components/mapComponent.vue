@@ -33,7 +33,6 @@ onMounted(() => {
             markers[data.trainnumber] = marker
         }
     });
-    console.log(socket.value);
 });
 
 </script>
