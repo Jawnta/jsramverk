@@ -34,13 +34,15 @@
   import {useTrainStore } from '../stores/train.js';
   const router = useRouter();
   const trainStore = useTrainStore();
+  const backend = import.meta.env.VITE_BACKEND_URL;
 
   const delayedTrains = ref([]);
   onMounted(() => {
+
     fetchDelayedTrains();
   });
   const fetchDelayedTrains = async () => {
-    const response = await fetch("http://localhost:1337/delayed");
+    const response = await fetch(`${backend}/delayed`);
     const result = await response.json();
     delayedTrains.value = result.data;
   }
@@ -55,7 +57,6 @@
     
     trainStore.setTrain(train)
     // Handle opening the ticket view, either with Vue Router or with a modal
-    console.log("Testing Route.", train)
     router.push({
         name: 'details',
         params: { trainNumber: train.OperationalTrainNumber },
