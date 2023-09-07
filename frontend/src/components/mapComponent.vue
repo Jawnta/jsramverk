@@ -10,6 +10,7 @@ import { io } from 'socket.io-client';
 const socket = ref(null);
 let markers = {};
 const map = ref(null);
+const backend = import.meta.env.VITE_BACKEND_URL;
 onBeforeUnmount(() => {
   // Disconnect the socket before unmounting the component
   if (socket.value) {
@@ -20,7 +21,7 @@ onBeforeUnmount(() => {
 onMounted(() => {
   map.value = L.map('leaflet-map').setView([62.173276, 14.942265], 5); // Set initial coordinates and zoom level
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value); // Add a base tile layer
-  socket.value = io("http://localhost:1337");
+  socket.value = io(backend);
   socket.value.on("message", (data) => {
         if (markers.hasOwnProperty(data.trainnumber)) {
             let marker = markers[data.trainnumber]
@@ -32,6 +33,7 @@ onMounted(() => {
             markers[data.trainnumber] = marker
         }
     });
+    console.log(socket.value);
 });
 
 </script>

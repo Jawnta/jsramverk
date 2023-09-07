@@ -14,7 +14,7 @@ describe('Delayed Trains Component Tests', () => {
 
   beforeEach(() => {
     // Intercepting the API call to return mock data.
-    cy.intercept('GET', 'http://localhost:1337/delayed', {
+    cy.intercept('GET', process.env.VUE_APP_BACKEND_URL + "/delayed", {
       body: { data: delayedTrainsData },
     });
     cy.visit('/');

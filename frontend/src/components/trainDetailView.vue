@@ -30,6 +30,8 @@ import { useTrainStore } from '../stores/train.js';
 import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
+const backend = import.meta.env.VITE_BACKEND_URL;
+console.log(backend);
 
 
 const tickets = ref([]);
@@ -65,7 +67,7 @@ const submitNewTicket = () => {
         traindate: train.value.EstimatedTimeAtLocation.substring(0, 10),
     };
 
-    fetch("http://localhost:1337/tickets", {
+    fetch(`${backend}/tickets`, {
         body: JSON.stringify(newTicket),
         headers: {
             'content-type': 'application/json'
@@ -79,7 +81,7 @@ const submitNewTicket = () => {
 };
 
 const fetchTickets = () => {
-    fetch("http://localhost:1337/tickets")
+    fetch(`${backend}/tickets`)
         .then(response => response.json())
         .then(result => {
             tickets.value = result.data;
@@ -89,7 +91,7 @@ const fetchTickets = () => {
 };
 
 const fetchReasonCodes = () => {
-    fetch("http://localhost:1337/codes")
+    fetch(`${backend}/codes`)
         .then(response => response.json())
         .then(result => {
             reasonCodes.value = result.data;
