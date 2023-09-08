@@ -73,7 +73,7 @@ jobs:
       uses: cypress-io/github-action@v6
       with: 
         working-directory: ./frontend
-        run: test:e2e
+        command: test:e2e
         wait-on: 'http://localhost:4173'
       env:
         BACKEND: 'https://jsramverk-editor-jorp.azurewebsites.net'
