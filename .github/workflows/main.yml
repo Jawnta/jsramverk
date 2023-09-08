@@ -27,6 +27,7 @@ jobs:
       working-directory: ./backend
       run: |
         echo "ATLAS_URI=${{ secrets.MONGODB }}" >> .env
+
         
     - name: Install dependencies
       working-directory: ./backend
