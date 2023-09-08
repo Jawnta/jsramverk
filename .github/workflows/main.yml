@@ -75,4 +75,4 @@ jobs:
         working-directory: ./frontend
         command: npm run test:e2e
       env:
-        BACKEND: 'https://jsramverk-editor-jorp.azurewebsites.net'
+        BACKEND: https://jsramverk-editor-jorp.azurewebsites.net
