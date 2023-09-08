@@ -33,6 +33,10 @@ jobs:
 
     - name: Format code with Prettier
       working-directory: ./backend
+      run: npx prettier --write .
+      
+    - name: Check Prettier format
+      working-directory: ./backend
       run: npx prettier --check .
 
     - name: Run tests
@@ -59,8 +63,14 @@ jobs:
 
     - name: Format code with Prettier
       working-directory: ./frontend
+      run: npx prettier --write .
+
+    - name: Check Prettier format
+      working-directory: ./frontend
       run: npx prettier --check .
 
     - name: Run E2E tests
       working-directory: ./frontend
+      env:
+        BACKEND: ${{ secrets.BACKEND }}
       run: npm run test:e2e
