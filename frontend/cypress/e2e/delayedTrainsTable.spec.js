@@ -12,9 +12,9 @@ describe('Delayed Trains Component Tests', () => {
     ]
 
     beforeEach(() => {
-        cy.request(`${Cypress.env('BACKEND')}/delayed`).its('status').should('eq', 200);
+        cy.request(`https://jsramverk-editor-jorp.azurewebsites.net/delayed`).its('status').should('eq', 200);
         // Intercepting the API call to return mock data and aliasing it.
-        cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, {
+        cy.intercept('GET', `https://jsramverk-editor-jorp.azurewebsites.net/delayed`, {
             body: { data: delayedTrainsData }
         }).as('fetchDelayedTrains')
 
