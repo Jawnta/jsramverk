@@ -39,7 +39,6 @@ jobs:
       working-directory: ./backend
       env:
         ATLAS_URI: ${{ secrets.ATLAS_URI }}
-      
       run: npm run test
 
   frontend-tests:
