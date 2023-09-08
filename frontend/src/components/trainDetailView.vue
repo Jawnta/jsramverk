@@ -25,13 +25,11 @@
   
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { defineProps } from 'vue';
 import { useTrainStore } from '../stores/train.js';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const backend = import.meta.env.VITE_BACKEND_URL;
-console.log(backend);
 
 
 const tickets = ref([]);
