@@ -26,10 +26,6 @@ jobs:
     - name: Create .Env
       working-directory: ./backend
       run: |
-        echo "TRAFIKVERKET_API_KEY=${{ secrets.TRAFIKVERKET_API_KEY }}" >> .env
-        echo "ATLAS_USERNAME=${{ secrets.ATLAS_USERNAME }}" >> .env
-        echo "ATLAS_PASSWORD=${{ secrets.ATLAS_PASSWORD }}" >> .env
-        echo "PORT=${{ secrets.PORT }}" >> .env
         echo "ATLAS_URI=${{ secrets.ATLAS_URI }}" >> .env
         
     - name: Install dependencies
