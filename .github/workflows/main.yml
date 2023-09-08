@@ -23,11 +23,6 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Create .Env
-      working-directory: ./backend
-      run: |
-        echo "ATLAS_URI=${{ secrets.ATLAS_URI }}" >> .env
-        
     - name: Install dependencies
       working-directory: ./backend
       run: npm install
@@ -42,6 +37,9 @@ jobs:
 
     - name: Run tests
       working-directory: ./backend
+      env:
+        ATLAS_URI: ${{ secrets.ATLAS_URI }}
+      
       run: npm run test
 
   frontend-tests:
