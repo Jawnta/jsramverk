@@ -38,7 +38,7 @@ jobs:
     - name: Run tests
       working-directory: ./backend
       env: 
-        ATLAS_URI: ${{ MONGODB }}
+        ATLAS_URI: ${{ secrets.MONGODB }}
       run: npm run test
 
   frontend-tests:
