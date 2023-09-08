@@ -1,3 +1,3 @@
-const fetchMock = jest.fn();
+const fetchMock = jest.fn()
 
-module.exports = fetchMock;
+module.exports = fetchMock

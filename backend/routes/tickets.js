@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const tickets = require("../models/tickets.js");
+const tickets = require('../models/tickets.js')
 
-router.get('/', (req, res) => tickets.getTickets(req, res));
+router.get('/', (req, res) => tickets.getTickets(req, res))
 
-router.post('/', (req, res) => tickets.createTicket(req, res));
+router.post('/', (req, res) => tickets.createTicket(req, res))
 
-module.exports = router;
+module.exports = router
