@@ -71,4 +71,6 @@ jobs:
 
     - name: Run E2E tests
       working-directory: ./frontend
+      env:
+        BACKEND: ${{ secrets.BACKEND }}
       run: npm run test:e2e
