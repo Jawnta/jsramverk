@@ -28,23 +28,22 @@ const delayed = {
                         <INCLUDE>TimeAtLocation</INCLUDE>
                         <INCLUDE>TrainOwner</INCLUDE>
                   </QUERY>
-            </REQUEST>`;
+            </REQUEST>`
 
-
-            fetch(
-                "https://api.trafikinfo.trafikverket.se/v2/data.json", {
-                    method: "POST",
-                    body: query,
-                    headers: { "Content-Type": "text/xml" }
-                }
-            ).then(function(response) {
+        fetch('https://api.trafikinfo.trafikverket.se/v2/data.json', {
+            method: 'POST',
+            body: query,
+            headers: { 'Content-Type': 'text/xml' }
+        })
+            .then(function (response) {
                 return response.json()
-            }).then(function(result) {
+            })
+            .then(function (result) {
                 return res.json({
                     data: result.RESPONSE.RESULT[0].TrainAnnouncement
-                });
+                })
             })
     }
-};
+}
 
-module.exports = delayed;
+module.exports = delayed
