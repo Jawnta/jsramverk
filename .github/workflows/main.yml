@@ -33,6 +33,10 @@ jobs:
 
     - name: Format code with Prettier
       working-directory: ./backend
+      run: npx prettier --write .
+      
+    - name: Check Prettier format
+      working-directory: ./backend
       run: npx prettier --check .
 
     - name: Run tests
@@ -58,6 +62,10 @@ jobs:
       run: npx eslint .
 
     - name: Format code with Prettier
+      working-directory: ./frontend
+      run: npx prettier --write .
+
+    - name: Check Prettier format
       working-directory: ./frontend
       run: npx prettier --check .
 
