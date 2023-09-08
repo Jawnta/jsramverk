@@ -74,6 +74,5 @@ jobs:
       with: 
         working-directory: ./frontend
         command: test:e2e
-        wait-on: 'http://localhost:4173'
       env:
         BACKEND: 'https://jsramverk-editor-jorp.azurewebsites.net'
