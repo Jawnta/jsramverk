@@ -1,7 +1,7 @@
 describe('Component Tests', () => {
     // Load the page or component before running the tests
     beforeEach(() => {
-        cy.visit('/') // Change the path to the actual path of your component page
+        cy.visit('/') 
     })
 
     it('should render the trainsTable component', () => {
