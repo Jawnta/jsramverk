@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const fetch =  require("node-fetch");
 const fetchTrainPositions = require("../models/trains");
 const EventSource = require("eventsource");
 

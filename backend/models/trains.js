@@ -55,9 +55,10 @@ async function fetchTrainPositions(io) {
                         speed: changedPosition.Speed,
                     };
 
-                    if (trainPositions.hasOwnProperty(changedPosition.Train.AdvertisedTrainNumber)) {
+                    if (Object.prototype.hasOwnProperty.call(trainPositions, changedPosition.Train.AdvertisedTrainNumber)) {
                         socket.emit("message", trainObject);
                     }
+                    
 
                     trainPositions[changedPosition.Train.AdvertisedTrainNumber] = trainObject;
                 }
@@ -71,7 +72,7 @@ async function fetchTrainPositions(io) {
 
 
 
-    eventSource.onerror = function(e) {
+    eventSource.onerror = function() {
         console.log("EventSource failed.")
     }
 }

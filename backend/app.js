@@ -2,7 +2,6 @@ require('dotenv').config()
 
 const express = require('express')
 const cors = require('cors')
-const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const fetchTrainPositions = require('./models/trains.js')
 const delayed = require('./routes/delayed.js');

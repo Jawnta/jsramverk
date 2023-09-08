@@ -31,7 +31,7 @@ const delayed = {
             </REQUEST>`;
 
 
-            const response = fetch(
+            fetch(
                 "https://api.trafikinfo.trafikverket.se/v2/data.json", {
                     method: "POST",
                     body: query,

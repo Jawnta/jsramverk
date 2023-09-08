@@ -1,6 +1,5 @@
 const database = require("../db/database.js");
 const tickets = require("../models/tickets.js");
-const { MongoClient } = require("mongodb");
 
 // Mock the database module
 jest.mock("../db/database.js");
