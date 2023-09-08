@@ -1,4 +1,3 @@
-const backend = import.meta.env.VITE_BACKEND_URL;
 describe('Delayed Trains Component Tests', () => {
   const delayedTrainsData = [
     // Mock data for your delayed trains
@@ -15,7 +14,7 @@ describe('Delayed Trains Component Tests', () => {
 
   beforeEach(() => {
     // Intercepting the API call to return mock data.
-    cy.intercept('GET', `${backend}/delayed`, {
+    cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, {
       body: { data: delayedTrainsData },
     });
     cy.visit('/');
