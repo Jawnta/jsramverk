@@ -1,7 +1,7 @@
 name: ESLint, Prettier
 
 on:
-  push:
+  pull:
     branches:
       - '**'
 
