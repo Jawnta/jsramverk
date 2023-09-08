@@ -23,6 +23,11 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
+    - name: Create .Env
+      working-directory: ./backend
+      run: |
+        echo "ATLAS_URI=${{ secrets.MONGODB }}" >> .env
+        
     - name: Install dependencies
       working-directory: ./backend
       run: npm install
