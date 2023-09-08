@@ -24,6 +24,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Create .Env
+      working-directory: ./backend
       run: |
         echo "TRAFIKVERKET_API_KEY=${{ secrets.TRAFIKVERKET_API_KEY }}" >> .env
         echo "ATLAS_USERNAME=${{ secrets.ATLAS_USERNAME }}" >> .env
