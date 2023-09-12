@@ -73,4 +73,6 @@ jobs:
       uses: cypress-io/github-action@v6
       with: 
         working-directory: ./frontend
-        run: npm run test:e2e
+        command: npm run test:e2e
+      env:
+        BACKEND: ${{ secrets.BACKEND }}
