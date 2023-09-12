@@ -13,12 +13,12 @@ describe('Delayed Trains Component Tests', () => {
 
     beforeEach(() => {
         // Intercepting the API call to return mock data.
-        cy.intercept('GET', `https://jsramverk-editor-jorp.azurewebsites.net/delayed`, {
-            body: { data: delayedTrainsData }
-        }).as('getDelayedTrains')
+        cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, (req) => {
+            console.log('Intercepted request:', req);
+            req.reply({ body: { data: delayedTrainsData } });
+        }).as('getDelayedTrains');
         console.log("BACKEND URL: ", Cypress.env('BACKEND'))
-        cy.visit('/')
-        cy.wait('@getDelayedTrains')
+        cy.visit('/') 
     })
 
     it('should display delayed trains correctly', () => {
