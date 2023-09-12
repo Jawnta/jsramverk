@@ -3,12 +3,17 @@ describe('Delayed Trains Component Tests', () => {
     beforeEach(() => {
         // Load the fixture and set up the intercept
         cy.fixture('delayedTrains.json').then((delayedTrainsData) => {
-            cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, {
+            cy.intercept('GET', "https://jsramverk-editor-jorp.azurewebsites.net/delayed", {
                 body: { data: delayedTrainsData }
-            });
+            }).as('delayedTrains');
         });
         cy.visit('/');
+        cy.wait('@delayedTrains').then((interception) => {
+            // Log details of the intercepted request
+            console.log(interception);
+        });
     });
+    
 
     it('should display delayed trains correctly', () => {
         cy.get('.delayed .train-number').first().should('contain', '12345');
