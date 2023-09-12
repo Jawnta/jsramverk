@@ -8,6 +8,7 @@ describe('Delayed Trains Component Tests', () => {
             }).as('delayedTrains');
         });
         cy.visit('/');
+        cy.wait('@delayedTrains');
 
     });
 
