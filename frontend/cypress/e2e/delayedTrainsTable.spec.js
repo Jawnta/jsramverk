@@ -15,8 +15,10 @@ describe('Delayed Trains Component Tests', () => {
         // Intercepting the API call to return mock data.
         cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, {
             body: { data: delayedTrainsData }
-        })
+        }).as('getDelayedTrains')
+        console.log("BACKEND URL: ", Cypress.env('BACKEND'))
         cy.visit('/')
+        cy.wait('@getDelayedTrains')
     })
 
     it('should display delayed trains correctly', () => {
