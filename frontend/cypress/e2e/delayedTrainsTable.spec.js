@@ -20,7 +20,7 @@ describe('Delayed Trains Component Tests', () => {
     })
 
     it('should display delayed trains correctly', () => {
-        cy.get('[data-testid="train-number"]').first().should('contain', '12345')
+        cy.get('.delayed .train-number').first().should('be.visible').should('contain', '12345')
         cy.get('[data-testid="current-station"]').first().should('contain', 'Station A')
         cy.get('[data-testid="delay"]').first().should('contain', '15 minuter')
     })
