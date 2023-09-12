@@ -13,7 +13,7 @@ describe('Delayed Trains Component Tests', () => {
     it('should display specific train data correctly', () => {
         // Intercept here
         cy.fixture('delayedTrains.json').then((delayedTrainsData) => {
-            cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, {
+            cy.intercept('GET', `https://jsramverk-editor-jorp.azurewebsites.net/delayed`, {
                 body: { data: delayedTrainsData }
             }).as('delayedTrains');
         });
@@ -30,7 +30,7 @@ describe('Delayed Trains Component Tests', () => {
     it('should navigate to ticket view on clicking a train row', () => {
         // Intercept here if needed
         cy.fixture('delayedTrains.json').then((delayedTrainsData) => {
-            cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, {
+            cy.intercept('GET', `https://jsramverk-editor-jorp.azurewebsites.net/delayed`, {
                 body: { data: delayedTrainsData }
             }).as('delayedTrains');
         });
