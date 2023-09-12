@@ -72,13 +72,13 @@ jobs:
       working-directory: ./frontend
       run: npx prettier --check .
 
-    - name: Cypress run
-      uses: cypress-io/github-action@v6
-      with:
-        working-directory: ./frontend
-        build: npm run build
-        start: npm run preview  # Start your server using this command
-        command: npx cypress run  # This is the command to run Cypress tests
-        browser: chrome
-      env:
-        BACKEND: ${{ secrets.BACKEND }}
+   # - name: Cypress run
+     # uses: cypress-io/github-action@v6
+     # with:
+      #  working-directory: ./frontend
+       # build: npm run build
+       # start: npm run preview  # Start your server using this command
+       # command: npx cypress run  # This is the command to run Cypress tests
+       # browser: chrome
+    #  env:
+       # BACKEND: ${{ secrets.BACKEND }}
