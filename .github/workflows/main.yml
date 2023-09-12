@@ -47,7 +47,10 @@ jobs:
 
   frontend-tests:
     if: contains(github.event.head_commit.message, 'frontend') || startsWith(github.event_name, 'pull_request')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    container:
+      image: cypress/browsers:node18.12.0-chrome106-ff106
+      options: --user 1001
 
     steps:
     - name: Check out code
@@ -69,10 +72,13 @@ jobs:
       working-directory: ./frontend
       run: npx prettier --check .
 
-    - name: Run E2E tests
+    - name: Cypress run
       uses: cypress-io/github-action@v6
-      with: 
+      with:
         working-directory: ./frontend
-        command: npm run test:e2e
+        build: npm run build
+        start: npm run preview  # Start your server using this command
+        command: npx cypress run  # This is the command to run Cypress tests
+        browser: chrome
       env:
         BACKEND: ${{ secrets.BACKEND }}
