@@ -8,10 +8,6 @@ describe('Delayed Trains Component Tests', () => {
             }).as('delayedTrains');
         });
         cy.visit('/');
-        cy.wait('@delayedTrains').then((interception) => {
-            // Log details of the intercepted request
-            console.log(interception);
-        });
     });
     
 
