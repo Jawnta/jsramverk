@@ -3,11 +3,12 @@ describe('Delayed Trains Component Tests', () => {
     beforeEach(() => {
         // Load the fixture and set up the intercept
         cy.fixture('delayedTrains.json').then((delayedTrainsData) => {
-            cy.intercept('GET', `https://jsramverk-editor-jorp.azurewebsites.net/delayed`, {
+            cy.intercept('GET', `${Cypress.env('BACKEND')}/delayed`, {
                 body: { data: delayedTrainsData }
             }).as('delayedTrains');
         });
-        cy.visit('/');
+        cy.visit('/', { timeout: 10000 });
+        cy.wait('@delayedTrains', { timeout: 10000 });
 
     });
 
