@@ -74,3 +74,5 @@ jobs:
       with: 
         working-directory: ./frontend
         command: npm run test:e2e
+      env:
+        BACKEND: ${{ secrets.BACKEND }}
