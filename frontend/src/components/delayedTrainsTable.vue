@@ -11,24 +11,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="item in delayedTrains"
-                        :key="item.OperationalTrainNumber"
-                        @click="openTicketView(item)"
-                    >
-                        <td class="train-number">{{ item.OperationalTrainNumber }}</td>
-                        <td class="current-station">
+                    <tr v-for="item in delayedTrains" :key="item.OperationalTrainNumber" @click="openTicketView(item)"
+                        :data-testid="`train-row-${item.OperationalTrainNumber}`">
+                        <td class="train-number" data-testid="train-number">{{ item.OperationalTrainNumber }}</td>
+                        <td class="current-station" data-testid="current-station">
                             <div>{{ item.LocationSignature }}</div>
                             <div>
                                 {{
                                     item.FromLocation
-                                        ? item.FromLocation[0].LocationName + ' -> '
-                                        : ''
+                                    ? item.FromLocation[0].LocationName + ' -> '
+                                    : ''
                                 }}
                                 {{ item.ToLocation ? item.ToLocation[0].LocationName : '' }}
                             </div>
                         </td>
-                        <td class="delay">{{ computeDelay(item) }}</td>
+                        <td class="delay" data-testid="delay">{{ computeDelay(item) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -84,7 +81,7 @@ const openTicketView = (train) => {
     flex-direction: column;
 }
 
-.delayed-trains > div {
+.delayed-trains>div {
     display: flex;
     flex-direction: row;
     border-top: 1px solid #ccc;
@@ -93,7 +90,7 @@ const openTicketView = (train) => {
     cursor: pointer;
 }
 
-.delayed-trains > div:nth-of-type(2n) {
+.delayed-trains>div:nth-of-type(2n) {
     background-color: #eee;
 }
 

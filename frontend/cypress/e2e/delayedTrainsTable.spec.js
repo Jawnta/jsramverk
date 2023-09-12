@@ -20,13 +20,14 @@ describe('Delayed Trains Component Tests', () => {
     })
 
     it('should display delayed trains correctly', () => {
-        cy.get('.delayed .train-number').first().should('contain', '12345')
-        cy.get('.delayed .current-station').first().should('contain', 'Station A')
-        cy.get('.delayed .delay').first().should('contain', '15 minuter')
+        cy.get('[data-testid="train-number"]').first().should('contain', '12345')
+        cy.get('[data-testid="current-station"]').first().should('contain', 'Station A')
+        cy.get('[data-testid="delay"]').first().should('contain', '15 minuter')
     })
 
     it('should navigate to ticket view on clicking a train row', () => {
-        cy.get('.delayed tbody tr').first().click()
+        cy.get('[data-testid="train-row-12345"]').first().click()
         cy.url().should('include', '/details/12345')
     })
+    
 })
