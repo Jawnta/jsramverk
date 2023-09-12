@@ -77,7 +77,8 @@ jobs:
       with:
         working-directory: ./frontend
         build: npm run build
-        start: npx cypress run
+        start: npm run preview  # Start your server using this command
+        command: npx cypress run  # This is the command to run Cypress tests
         browser: chrome
       env:
         BACKEND: ${{ secrets.BACKEND }}
