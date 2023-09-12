@@ -42,8 +42,8 @@ const trainStore = useTrainStore()
 const backend = import.meta.env.VITE_BACKEND_URL
 
 const delayedTrains = ref([])
-onMounted(() => {
-    fetchDelayedTrains()
+ onMounted(async () => {
+   await fetchDelayedTrains()
 })
 const fetchDelayedTrains = async () => {
     const response = await fetch(`${backend}/delayed`)
