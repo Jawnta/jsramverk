@@ -33,9 +33,4 @@ describe('getCodes', () => {
         expect(res.body).toHaveProperty('data')
     })
 
-    // it('should handle API failure', async () => {
-    //     fetch.mockRejectedValueOnce(new Error('API is down'));
-    //     const res = await request(app).get('/codes');
-    //     expect(res.statusCode).toEqual(500);
-    // });
 })

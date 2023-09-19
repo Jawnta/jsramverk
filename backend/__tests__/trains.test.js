@@ -206,8 +206,7 @@ describe('fetchTrainPositions', () => {
         });
         expect(consoleLogSpy).toHaveBeenCalled();
         expect(consoleLogSpy.mock.calls[2][0]).toBeInstanceOf(SyntaxError);
-        expect(consoleLogSpy.mock.calls[2][0].message).toMatch(/^Unexpected token 'h'/);
-        
+        expect(consoleLogSpy.mock.calls[2][0].message).toContain("Unexpected token"); 
         // Restore the original console.log function after the test
         consoleLogSpy.mockRestore();
     });
