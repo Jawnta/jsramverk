@@ -1,25 +1,28 @@
 const fetch = require('node-fetch')
 const filterTrains = (trains) => {
-    const filteredTrains = {};
-    console.log(trains);
+    const filteredTrains = {}
+    console.log(trains)
     for (const train of trains) {
-        const operationalTrainNumber = train.OperationalTrainNumber;
-        
+        const operationalTrainNumber = train.OperationalTrainNumber
+
         // Skip trains with null or undefined OperationalTrainNumber
         if (operationalTrainNumber === null || operationalTrainNumber === undefined) {
-            continue;
+            continue
         }
 
-        const currentTimestamp = new Date(train.ModifiedTime).getTime();
+        const currentTimestamp = new Date(train.ModifiedTime).getTime()
 
         // If train number doesn't exist or it's older than the current one
-        if (!filteredTrains[operationalTrainNumber] || 
-            currentTimestamp > new Date(filteredTrains[operationalTrainNumber].ModifiedTime).getTime()) {
-            filteredTrains[operationalTrainNumber] = train;
+        if (
+            !filteredTrains[operationalTrainNumber] ||
+            currentTimestamp >
+                new Date(filteredTrains[operationalTrainNumber].ModifiedTime).getTime()
+        ) {
+            filteredTrains[operationalTrainNumber] = train
         }
     }
-    console.log("filter: ", filteredTrains);
-    return Object.values(filteredTrains); // convert the object back to an array
+    console.log('filter: ', filteredTrains)
+    return Object.values(filteredTrains) // convert the object back to an array
 }
 
 const delayed = {
@@ -51,43 +54,49 @@ const delayed = {
                         <INCLUDE>TrainOwner</INCLUDE>
                         <INCLUDE>ModifiedTime</INCLUDE>
                   </QUERY>
-            </REQUEST>`;
+            </REQUEST>`
 
         try {
             const response = await fetch('https://api.trafikinfo.trafikverket.se/v2/data.json', {
                 method: 'POST',
                 body: query,
                 headers: { 'Content-Type': 'text/xml' }
-            });
+            })
 
             if (!response.ok) {
-                throw new Error('Failed to fetch data');
+                throw new Error('Failed to fetch data')
             }
 
-            const result = await response.json();
-            const filteredTrainData = filterTrains(result.RESPONSE.RESULT[0].TrainAnnouncement);
-            
+            const result = await response.json()
+            const filteredTrainData = filterTrains(result.RESPONSE.RESULT[0].TrainAnnouncement)
+
             return res.json({
                 data: filteredTrainData
-            });
+            })
         } catch (error) {
-            console.error('Error:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
+            console.error('Error:', error)
+            return res.status(500).json({ error: 'Internal Server Error' })
         }
     },
 
     getPositions: async function (req, res) {
         // 1. Extract the train numbers from the request body
 
-        const trainNumbers = req.body.trainNumbers;
-       
+        const trainNumbers = req.body.trainNumbers
+
         // 2. Check if it's an array and contains strings
-        if (!trainNumbers || !Array.isArray(trainNumbers) || !trainNumbers.every(num => typeof num === 'string')) {
-            return res.status(400).json({ error: 'trainNumbers must be provided in the request body as an array of strings.' });
+        if (
+            !trainNumbers ||
+            !Array.isArray(trainNumbers) ||
+            !trainNumbers.every((num) => typeof num === 'string')
+        ) {
+            return res.status(400).json({
+                error: 'trainNumbers must be provided in the request body as an array of strings.'
+            })
         }
 
         // 3. Convert the array of strings to a single comma-separated string
-        const trainNumbersList = trainNumbers.join(',');
+        const trainNumbersList = trainNumbers.join(',')
 
         const query = `<REQUEST>
             <LOGIN authenticationkey="${process.env.TRAFIKVERKET_API_KEY}" />
@@ -96,23 +105,22 @@ const delayed = {
                     <IN name="Train.OperationalTrainNumber" value="${trainNumbersList}" />
                 </FILTER>
             </QUERY>
-        </REQUEST>`;
+        </REQUEST>`
 
         try {
             const response = await fetch('https://api.trafikinfo.trafikverket.se/v2/data.json', {
                 method: 'POST',
                 body: query,
                 headers: { 'Content-Type': 'text/xml' }
-            });
+            })
 
-            const result = await response.json();
-            res.json({ data: result.RESPONSE.RESULT[0] });
+            const result = await response.json()
+            res.json({ data: result.RESPONSE.RESULT[0] })
         } catch (error) {
-            console.error('Error:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
+            console.error('Error:', error)
+            res.status(500).json({ error: 'Internal Server Error' })
         }
     }
-};
-
+}
 
 module.exports = delayed

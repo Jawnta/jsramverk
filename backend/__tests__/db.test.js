@@ -1,46 +1,46 @@
-jest.mock('mongodb');
+jest.mock('mongodb')
 
-const { MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb')
 
 // Mock the client and the connect function
-const mockConnect = jest.fn();
+const mockConnect = jest.fn()
 MongoClient.mockImplementation(() => ({
-  connect: mockConnect
-}));
+    connect: mockConnect
+}))
 
-const database = require('../db/database');
+const database = require('../db/database')
 
-let consoleErrorSpy;
+let consoleErrorSpy
 
 beforeEach(() => {
-  // Reset all mock implementations before each test
-  mockConnect.mockClear();
+    // Reset all mock implementations before each test
+    mockConnect.mockClear()
 
-  // Spy on console.error
-  consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-});
+    // Spy on console.error
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+})
 
 afterEach(() => {
-  // Restore the console.error spy
-  consoleErrorSpy.mockRestore();
-});
+    // Restore the console.error spy
+    consoleErrorSpy.mockRestore()
+})
 describe('database', () => {
     describe('openDb', () => {
         it('should open the database successfully', async () => {
-            const mockDbInstance = { db: jest.fn().mockReturnValue('mockDb') };
-            mockConnect.mockResolvedValueOnce(mockDbInstance);
+            const mockDbInstance = { db: jest.fn().mockReturnValue('mockDb') }
+            mockConnect.mockResolvedValueOnce(mockDbInstance)
 
-            const result = await database.openDb();
-            expect(result).toBe('mockDb');
-        });
-    });
-});
+            const result = await database.openDb()
+            expect(result).toBe('mockDb')
+        })
+    })
+})
 describe('openDb', () => {
     it('should handle connection error', async () => {
-        const mockError = new Error('Connection Error');
-        mockConnect.mockRejectedValueOnce(mockError);
+        const mockError = new Error('Connection Error')
+        mockConnect.mockRejectedValueOnce(mockError)
 
-        await database.openDb();
-        expect(consoleErrorSpy).toHaveBeenCalledWith(mockError);
-    });
-});
+        await database.openDb()
+        expect(consoleErrorSpy).toHaveBeenCalledWith(mockError)
+    })
+})
