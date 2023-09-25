@@ -2,6 +2,7 @@
     <div>
         <div class="delayed">
             <h1>Försenade tåg</h1>
+            <button @click="resetSelectedTrain">Nollställ mig</button>
             <table>
                 <thead>
                     <tr>
@@ -14,7 +15,7 @@
                     <tr
                         v-for="item in delayedTrains"
                         :key="item.OperationalTrainNumber"
-                        @click="openTicketView(item)"
+                        @click="selectTrain(item)"
                     >
                         <td class="train-number">{{ item.OperationalTrainNumber }}</td>
                         <td class="current-station">
@@ -45,14 +46,24 @@ const trainStore = useTrainStore()
 const backend = import.meta.env.VITE_BACKEND_URL
 
 const delayedTrains = ref([])
-onMounted(() => {
-    fetchDelayedTrains()
+onMounted(async () => {
+    await fetchDelayedTrains()
+    setDelayedTrains()
 })
 const fetchDelayedTrains = async () => {
     const response = await fetch(`${backend}/delayed`)
     const result = await response.json()
+    console.log(result.data)
     delayedTrains.value = result.data
 }
+const resetSelectedTrain = () => {
+    trainStore.setFilter(false)
+}
+const setDelayedTrains = () => {
+   
+    const operationalTrainNumbers = delayedTrains.value.map(train => train.OperationalTrainNumber);
+    trainStore.setDelayedTrains(operationalTrainNumbers)
+};
 
 const computeDelay = (item) => {
     let advertised = new Date(item.AdvertisedTimeAtLocation)
@@ -60,14 +71,19 @@ const computeDelay = (item) => {
     const diff = Math.abs(estimated - advertised)
     return Math.floor(diff / (1000 * 60)) + ' minuter'
 }
-const openTicketView = (train) => {
+// const openTicketView = (train) => {
+//     trainStore.setTrain(train)
+//     // Handle opening the ticket view, either with Vue Router or with a modal
+//     router.push({
+//         name: 'details',
+//         params: { trainNumber: train.OperationalTrainNumber }
+//     })
+// }
+
+const selectTrain = (train) => {
+    trainStore.setFilter(true)
     trainStore.setTrain(train)
-    // Handle opening the ticket view, either with Vue Router or with a modal
-    router.push({
-        name: 'details',
-        params: { trainNumber: train.OperationalTrainNumber }
-    })
-}
+};
 </script>
 
 <style scoped>

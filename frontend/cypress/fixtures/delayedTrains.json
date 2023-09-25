@@ -1,0 +1,11 @@
+[
+    {
+      "OperationalTrainNumber": "12345",
+      "LocationSignature": "Station A",
+      "FromLocation": [{ "LocationName": "Start A" }],
+      "ToLocation": [{ "LocationName": "Destination A" }],
+      "AdvertisedTimeAtLocation": "2023-09-01T10:00:00",
+      "EstimatedTimeAtLocation": "2023-09-01T10:15:00"
+    }
+  ]
+  

@@ -12,7 +12,7 @@ function renderMainView() {
             </div>
             <div id="map" class="map"></div>`;
 
-    const socket = io("http://localhost:1337");
+    const socket = io();
 
     const map = L.map('map').setView([62.173276, 14.942265], 5);
 
@@ -37,7 +37,7 @@ function renderMainView() {
 
     let delayed = document.getElementById("delayed-trains");
 
-    fetch("http://localhost:1337/delayed")
+    fetch("http://109.228.158.227:8888/delayed")
         .then((response) => response.json())
         .then(function(result) {
             return renderDelayedTable(result.data, delayed);

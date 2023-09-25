@@ -32,5 +32,4 @@ describe('getCodes', () => {
         expect(res.statusCode).toEqual(200)
         expect(res.body).toHaveProperty('data')
     })
-
 })

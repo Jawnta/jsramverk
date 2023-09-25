@@ -73,11 +73,11 @@ describe('fetchTrainPositions', () => {
     })
 
     it('should fetch train positions and handle server sent events', async () => {
-        await fetchTrainPositions(ioMock);
-    
+        await fetchTrainPositions(ioMock)
+
         // First, simulate the io connection
-        ioMock.on.mock.calls[0][1](socketMock);
-    
+        ioMock.on.mock.calls[0][1](socketMock)
+
         // Now, simulate an event from EventSource
         const eventData = {
             RESPONSE: {
@@ -100,10 +100,10 @@ describe('fetchTrainPositions', () => {
                     }
                 ]
             }
-        };
+        }
         eventSourceInstance.onmessage({
             data: JSON.stringify(eventData)
-        });
+        })
         const updatedData = {
             RESPONSE: {
                 RESULT: [
@@ -125,14 +125,14 @@ describe('fetchTrainPositions', () => {
                     }
                 ]
             }
-        };
+        }
         eventSourceInstance.onmessage({
             data: JSON.stringify(updatedData)
-        });
+        })
         // Assert that socket.emit was called with the correct parameters
-        expect(ioMock.on).toHaveBeenCalledWith('connection', expect.any(Function));
-        expect(ioMock.on).toHaveBeenCalledTimes(1);
-        expect(ioMock.on.mock.calls[0][0]).toBe('connection');
+        expect(ioMock.on).toHaveBeenCalledWith('connection', expect.any(Function))
+        expect(ioMock.on).toHaveBeenCalledTimes(1)
+        expect(ioMock.on.mock.calls[0][0]).toBe('connection')
         expect(socketMock.emit).toHaveBeenCalledWith('message', {
             trainnumber: 'NewTestDatahere124',
             position: [11.5678, 58.5678],
@@ -140,25 +140,24 @@ describe('fetchTrainPositions', () => {
             bearing: 180,
             status: true,
             speed: 120
-        });
-    });
-    
+        })
+    })
+
     it('should not process invalid or empty parsedData', async () => {
         // Initiate fetchTrainPositions with the mock
-        await fetchTrainPositions(ioMock);
-    
+        await fetchTrainPositions(ioMock)
+
         // Simulate the io connection
-        ioMock.on.mock.calls[0][1](socketMock);
-    
+        ioMock.on.mock.calls[0][1](socketMock)
+
         // Send an empty message or a message that parses to a falsy value, such as 'null' or 'false'.
         eventSourceInstance.onmessage({
-            data: "null"
-        });
-    
+            data: 'null'
+        })
+
         // Validate that socket.emit was NOT called.
-        expect(socketMock.emit).not.toHaveBeenCalled();
-    });
-    
+        expect(socketMock.emit).not.toHaveBeenCalled()
+    })
 
     it('should handle onerror event', async () => {
         // Mock response with SSEURL
@@ -195,31 +194,31 @@ describe('fetchTrainPositions', () => {
         // Spy on console.log to assert later
         const consoleLogSpy = jest.spyOn(console, 'log')
 
-        await fetchTrainPositions(ioMock);
+        await fetchTrainPositions(ioMock)
 
         // Simulate the io connection
-        ioMock.on.mock.calls[0][1](socketMock);
+        ioMock.on.mock.calls[0][1](socketMock)
 
         // Send malformed JSON data
         eventSourceInstance.onmessage({
-            data: "this is not valid JSON"
-        });
-        expect(consoleLogSpy).toHaveBeenCalled();
-        expect(consoleLogSpy.mock.calls[2][0]).toBeInstanceOf(SyntaxError);
-        expect(consoleLogSpy.mock.calls[2][0].message).toContain("Unexpected token"); 
+            data: 'this is not valid JSON'
+        })
+        expect(consoleLogSpy).toHaveBeenCalled()
+        expect(consoleLogSpy.mock.calls[2][0]).toBeInstanceOf(SyntaxError)
+        expect(consoleLogSpy.mock.calls[2][0].message).toContain('Unexpected token')
         // Restore the original console.log function after the test
-        consoleLogSpy.mockRestore();
-    });
+        consoleLogSpy.mockRestore()
+    })
     it('should handle onopen event', async () => {
         // Intercept calls to console.log
-        const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    
-        await fetchTrainPositions(ioMock);
-    
+        const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+
+        await fetchTrainPositions(ioMock)
+
         // Simulate the onopen event
-        eventSourceInstance.onopen();
-    
+        eventSourceInstance.onopen()
+
         // Check if console.log was called with the expected message
-        expect(consoleLogSpy).toHaveBeenCalledWith('Connection to server opened.');
-    });
+        expect(consoleLogSpy).toHaveBeenCalledWith('Connection to server opened.')
+    })
 })
