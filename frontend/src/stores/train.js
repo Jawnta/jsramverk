@@ -14,7 +14,7 @@ export const useTrainStore = defineStore('train', () => {
         localStorage.setItem('delayedTrains', JSON.stringify(delayedTrainsList))
         delayedTrains.value = delayedTrainsList
     }
-    
+
     const markers = ref([])
     const setMarkers = (marker) => {
         markers.value.push(marker)
@@ -23,30 +23,40 @@ export const useTrainStore = defineStore('train', () => {
     const getMarker = async (opNumber) => {
         let tempMarker = null
         markers.value.forEach((marker) => {
-            const popupContent = marker.getPopup().getContent();
+            const popupContent = marker.getPopup().getContent()
 
             if (popupContent === opNumber) {
-               tempMarker =  marker
+                tempMarker = marker
             }
-        });
+        })
         return tempMarker
     }
 
     const updateMarkerPosition = async (opNumber, pos) => {
-        const markerToUpdate = await getMarker(opNumber);
-    
+        const markerToUpdate = await getMarker(opNumber)
+
         if (markerToUpdate) {
-            markerToUpdate.setLatLng(pos); // Set the new position
+            markerToUpdate.setLatLng(pos) // Set the new position
         } else {
-            console.error('Marker not found.');
+            console.error('Marker not found.')
         }
-    };
-    
+    }
+
     const filter = ref(false)
 
     const setFilter = (bool) => {
-        console.log("NU FILTER", bool)
         filter.value = bool
     }
-    return { currentTrain, setTrain, delayedTrains, setDelayedTrains, markers, setMarkers, getMarker, updateMarkerPosition, filter, setFilter }
+    return {
+        currentTrain,
+        setTrain,
+        delayedTrains,
+        setDelayedTrains,
+        markers,
+        setMarkers,
+        getMarker,
+        updateMarkerPosition,
+        filter,
+        setFilter
+    }
 })

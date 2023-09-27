@@ -21,16 +21,12 @@ const delayedTrainNumbers = ref([])
 const trainsPositions = ref([])
 const uniqueTrains = ref([]);
 
-// L.Icon.Default.mergeOptions({
-//     iconRetinaUrl: 'leaflet/dist/images/marker-icon-2x.png',
-//     iconUrl: markerIconUrl,
-//     shadowUrl: markerShadowUrl
-// })
-// let defaultIcon = new L.Icon.Default({
-//     iconUrl: markerIconUrl,
-//     shadowUrl: markerShadowUrl
-// });
-// L.Marker.prototype.options.icon = defaultIcon;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'leaflet/dist/images/marker-icon-2x.png',
+    iconUrl: markerIconUrl,
+    shadowUrl: markerShadowUrl
+})
+
 onBeforeUnmount(() => {
     // Disconnect the socket before unmounting the component
     if (socket.value) {
@@ -64,8 +60,8 @@ onMounted(async () => {
 const buildMap = async () => {
 
     map = L.map('leaflet-map', {
-    zoomAnimation: false
-}).setView([62.173276, 14.942265], 5);
+        zoomAnimation: false
+    }).setView([62.173276, 14.942265], 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map) // Add a base tile layer
     markers.value = new L.LayerGroup().addTo(map);
 
@@ -82,6 +78,7 @@ const removeDuplicates = (trains) => {
 };
 
 const initializeMarkers = async () => {
+    trainStore.setFilter(false)
     uniqueTrains.value = removeDuplicates(trainsPositions.value);
     uniqueTrains.value.forEach(element => {
         const matches = element.Position.WGS84.match(/POINT \(([^ ]+) ([^)]+)\)/);
@@ -92,7 +89,6 @@ const initializeMarkers = async () => {
         trainStore.setMarkers(marker)
         markers.value.addLayer(marker)
     })
-    console.log("MARKERS?", trainStore.markers)
 };
 
 const getSelectedTrainMarker = (opNumber) => {
@@ -113,7 +109,7 @@ const filterSelectedTrain = async () => {
 
     // Get the latitude and longitude for the current train
     const currentMarker = getSelectedTrainMarker(trainStore.currentTrain.OperationalTrainNumber);
-    
+
     // Clear all markers from the markers layer
     markers.value.clearLayers();
 
@@ -123,9 +119,9 @@ const filterSelectedTrain = async () => {
     } else {
         alert("Nuvarande position på tåget kunde inte hittas.")
         initializeMarkers();
-        
+
     }
-    
+
 };
 
 
@@ -148,24 +144,25 @@ const makePostRequest = async () => {
         }
         const data = await response.json();
         trainsPositions.value = data.data.TrainPosition
-        // Handle the response data here
     } catch (error) {
         console.error('Error:', error);
-        // Handle errors here
     }
-    watch(() => trainStore.currentTrain, (newTrain, oldTrain) => {
-        console.log("Train changed from: ", oldTrain, " to: ", newTrain);
-        
-        if (newTrain) {
-            filterSelectedTrain();
-        }
-    }, { deep: true });
-    watch(() => trainStore.filter, (newFilter, oldFilter) => {      
-        if (!newFilter) {
-            markers.value.clearLayers();
-            initializeMarkers();
-        }
-    }, { deep: true });
 }
+watch(() => trainStore.currentTrain, (newTrain) => {
+
+    if (newTrain && trainStore.filter) {
+        filterSelectedTrain();
+    }
+}, { deep: true });
+
+watch(() => trainStore.filter, (newFilter) => {
+    if (!newFilter) {
+        if (markers.value) {
+            markers.value.clearLayers();
+        }
+
+        initializeMarkers();
+    }
+}, { deep: true });
 </script>
 
