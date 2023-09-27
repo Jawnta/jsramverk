@@ -10,8 +10,8 @@
                 <select v-model="selectedReasonCode">
                     <option v-for="code in reasonCodes" :key="code.Code" :value="code.Code">
                         {{ code.Code }} - {{ code.Level3Description }}
-                    </option></select
-                ><br /><br />
+                    </option>
+                </select><br /><br />
                 <input type="submit" value="Skapa nytt ärende" />
             </form>
         </div>

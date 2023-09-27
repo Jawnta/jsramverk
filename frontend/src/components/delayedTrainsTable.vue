@@ -2,34 +2,32 @@
     <div>
         <div class="delayed">
             <h1>Försenade tåg</h1>
-            <button @click="resetSelectedTrain">Nollställ mig</button>
+            <button @click="resetSelectedTrain">Ta bort filter</button>
             <table>
                 <thead>
                     <tr>
                         <th>Tågnummer</th>
                         <th>Nuvarande station</th>
                         <th>Försening</th>
+                        <th>Ärende</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="item in delayedTrains"
-                        :key="item.OperationalTrainNumber"
-                        @click="selectTrain(item)"
-                    >
+                    <tr v-for="item in delayedTrains" :key="item.OperationalTrainNumber" @click="selectTrain(item)">
                         <td class="train-number">{{ item.OperationalTrainNumber }}</td>
                         <td class="current-station">
                             <div>{{ item.LocationSignature }}</div>
                             <div>
                                 {{
                                     item.FromLocation
-                                        ? item.FromLocation[0].LocationName + ' -> '
-                                        : ''
+                                    ? item.FromLocation[0].LocationName + ' -> '
+                                    : ''
                                 }}
                                 {{ item.ToLocation ? item.ToLocation[0].LocationName : '' }}
                             </div>
                         </td>
                         <td class="delay">{{ computeDelay(item) }}</td>
+                        <td> <button @click.stop="openTicketView(item)">Ärende</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -53,14 +51,13 @@ onMounted(async () => {
 const fetchDelayedTrains = async () => {
     const response = await fetch(`${backend}/delayed`)
     const result = await response.json()
-    console.log(result.data)
     delayedTrains.value = result.data
 }
 const resetSelectedTrain = () => {
     trainStore.setFilter(false)
 }
 const setDelayedTrains = () => {
-   
+
     const operationalTrainNumbers = delayedTrains.value.map(train => train.OperationalTrainNumber);
     trainStore.setDelayedTrains(operationalTrainNumbers)
 };
@@ -71,14 +68,14 @@ const computeDelay = (item) => {
     const diff = Math.abs(estimated - advertised)
     return Math.floor(diff / (1000 * 60)) + ' minuter'
 }
-// const openTicketView = (train) => {
-//     trainStore.setTrain(train)
-//     // Handle opening the ticket view, either with Vue Router or with a modal
-//     router.push({
-//         name: 'details',
-//         params: { trainNumber: train.OperationalTrainNumber }
-//     })
-// }
+const openTicketView = (train) => {
+    trainStore.setFilter(false)
+    trainStore.setTrain(train)
+    router.push({
+        name: 'details',
+        params: { trainNumber: train.OperationalTrainNumber }
+    })
+}
 
 const selectTrain = (train) => {
     trainStore.setFilter(true)
@@ -100,7 +97,7 @@ const selectTrain = (train) => {
     flex-direction: column;
 }
 
-.delayed-trains > div {
+.delayed-trains>div {
     display: flex;
     flex-direction: row;
     border-top: 1px solid #ccc;
@@ -109,7 +106,7 @@ const selectTrain = (train) => {
     cursor: pointer;
 }
 
-.delayed-trains > div:nth-of-type(2n) {
+.delayed-trains>div:nth-of-type(2n) {
     background-color: #eee;
 }
 

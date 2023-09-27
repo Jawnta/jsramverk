@@ -1,7 +1,6 @@
 const fetch = require('node-fetch')
 const filterTrains = (trains) => {
     const filteredTrains = {}
-    console.log(trains)
     for (const train of trains) {
         const operationalTrainNumber = train.OperationalTrainNumber
 
@@ -21,7 +20,6 @@ const filterTrains = (trains) => {
             filteredTrains[operationalTrainNumber] = train
         }
     }
-    console.log('filter: ', filteredTrains)
     return Object.values(filteredTrains) // convert the object back to an array
 }
 
