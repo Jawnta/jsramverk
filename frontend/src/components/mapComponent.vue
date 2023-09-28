@@ -85,7 +85,11 @@ const initializeMarkers = async () => {
         const longitude = parseFloat(matches[1]);
         const latitude = parseFloat(matches[2]);
         const marker = L.marker([latitude, longitude]).addTo(map)
-            .bindPopup(element.Train.OperationalTrainNumber)
+            .on('click', () => {
+                trainStore.setFilter(true)
+                trainStore.setTrain(element.Train)
+            })
+            .bindPopup(element.Train.OperationalTrainNumber);
         trainStore.setMarkers(marker)
         markers.value.addLayer(marker)
     })
