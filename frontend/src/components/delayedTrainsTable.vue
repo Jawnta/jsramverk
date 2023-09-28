@@ -36,31 +36,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { defineProps } from 'vue';
 import { useTrainStore } from '../stores/train.js'
 const router = useRouter()
 const trainStore = useTrainStore()
-const backend = import.meta.env.VITE_BACKEND_URL
+const { delayedTrains } = defineProps({
+  delayedTrains: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-const delayedTrains = ref([])
-onMounted(async () => {
-    await fetchDelayedTrains()
-    setDelayedTrains()
-})
-const fetchDelayedTrains = async () => {
-    const response = await fetch(`${backend}/delayed`)
-    const result = await response.json()
-    delayedTrains.value = result.data
-}
 const resetSelectedTrain = () => {
     trainStore.setFilter(false)
 }
-const setDelayedTrains = () => {
 
-    const operationalTrainNumbers = delayedTrains.value.map(train => train.OperationalTrainNumber);
-    trainStore.setDelayedTrains(operationalTrainNumbers)
-};
 
 const computeDelay = (item) => {
     let advertised = new Date(item.AdvertisedTimeAtLocation)

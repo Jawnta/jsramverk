@@ -17,7 +17,7 @@ const socket = ref(null)
 const markers = ref(null)
 let map;
 const backend = import.meta.env.VITE_BACKEND_URL
-const delayedTrainNumbers = ref([])
+const delayedTrainNumbers = ref( trainStore.delayedTrains || [])
 const trainsPositions = ref([])
 const uniqueTrains = ref([]);
 
@@ -35,13 +35,9 @@ onBeforeUnmount(() => {
 })
 
 onMounted(async () => {
-
-    delayedTrainNumbers.value = await trainStore.delayedTrains
     await buildMap();
-    // Call the function to make the POST request
     await makePostRequest();
     await initializeMarkers();
-
     socket.value = io(backend)
     socket.value.on('message', (data) => {
 
@@ -168,5 +164,7 @@ watch(() => trainStore.filter, (newFilter) => {
         initializeMarkers();
     }
 }, { deep: true });
+
+
 </script>
 
