@@ -1,10 +1,10 @@
 <template>
     <div class="wrapper">
         <div class="trainList">
-            <trainsTable data-testid="trainsTableComponent" />
+            <trainsTable data-testid="trainsTableComponent" :delayedTrains="delayedTrains" />
         </div>
 
-        <div class="map">
+        <div class="map" v-if="isloaded">
             <mapComponentVue data-testid="mapComponentVue" />
         </div>
     </div>
@@ -13,6 +13,29 @@
 <script setup>
 import mapComponentVue from '../components/mapComponent.vue'
 import trainsTable from '../components/delayedTrainsTable.vue'
+import { useTrainStore } from '../stores/train.js'
+import { ref, onMounted } from 'vue';
+const trainStore = useTrainStore()
+const backend = import.meta.env.VITE_BACKEND_URL
+
+const delayedTrains = ref([])
+const isloaded = ref(false)
+onMounted(async () => {
+    await fetchDelayedTrains()
+    setDelayedTrains()
+    isloaded.value = true
+})
+const fetchDelayedTrains = async () => {
+    const response = await fetch(`${backend}/delayed`)
+    const result = await response.json()
+    delayedTrains.value = result.data
+}
+
+const setDelayedTrains = () => {
+
+const operationalTrainNumbers = delayedTrains.value.map(train => train.OperationalTrainNumber);
+trainStore.setDelayedTrains(operationalTrainNumbers)
+};
 </script>
 
 <style scoped>
