@@ -1,5 +1,5 @@
 const database = require('../db/database.js')
-
+const { ObjectId } = require('mongodb');
 const tickets = {
     getTickets: async function getTickets(req, res) {
         const db = await database.openDb()
@@ -31,6 +31,25 @@ const tickets = {
                 ...ticket
             }
         })
+    },
+    
+    updateTicket: async function updateTicket(req, res) {
+        const db = await database.openDb();
+        const collection = db.collection('tickets');
+
+        const id = new ObjectId(req.params.id);
+
+        const updatedTicket = req.body;
+
+        const result = await collection.updateOne(
+            { _id: id },
+            { $set: updatedTicket }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: 'No ticket found with the specified id' });
+        }
+
+        return res.json({ success: true });
     }
 }
 
