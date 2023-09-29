@@ -2,14 +2,20 @@ const fetch = require('node-fetch')
 const filterTrains = (trains) => {
     const filteredTrains = {}
     for (const train of trains) {
-        const operationalTrainNumber = train.OperationalTrainNumber
+        const operationalTrainNumber = train.OperationalTrainNumber;
+        const toLocation = train.ToLocation;  // Extract ToLocation information
 
-        // Skip trains with null or undefined OperationalTrainNumber
-        if (operationalTrainNumber === null || operationalTrainNumber === undefined) {
-            continue
+        // Skip trains with null or undefined OperationalTrainNumber or ToLocation
+        if (
+            operationalTrainNumber === null || 
+            operationalTrainNumber === undefined ||
+            toLocation === null ||
+            toLocation === undefined 
+        ) {
+            continue;
         }
 
-        const currentTimestamp = new Date(train.ModifiedTime).getTime()
+        const currentTimestamp = new Date(train.ModifiedTime).getTime();
 
         // If train number doesn't exist or it's older than the current one
         if (
@@ -17,11 +23,12 @@ const filterTrains = (trains) => {
             currentTimestamp >
                 new Date(filteredTrains[operationalTrainNumber].ModifiedTime).getTime()
         ) {
-            filteredTrains[operationalTrainNumber] = train
+            filteredTrains[operationalTrainNumber] = train;
         }
     }
-    return Object.values(filteredTrains) // convert the object back to an array
+    return Object.values(filteredTrains);  // Convert the object back to an array
 }
+
 
 const delayed = {
     getDelayedTrains: async function getDelayedTrains(req, res) {
