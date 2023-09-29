@@ -1,35 +1,35 @@
 <template>
-        <div class="old-tickets">
-            <h2>Befintliga ärenden</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Orsakskod</th>
-                        <th>Tågnummer</th>
-                        <th>Datum</th>
-                        <th>Ny Orsakskod</th>
-                        <th>Uppdatera</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="ticket in tickets" :key="ticket.id">
-                        <td>{{ ticket.code }}</td>
-                        <td>{{ ticket.trainnumber }}</td>
-                        <td>{{ ticket.traindate }}</td>
-                        <td>
-                            <select v-model="ticket.selectedReasonCode" class="reason-code-select">
-                                <option v-for="code in reasonCodes" :key="code.Code" :value="code.Code">
-                                    {{ code.Code }} - {{ code.Level3Description }}
-                                </option>
-                            </select>
-                        </td>
-                        <td>
-                            <button @click="updateTicketReason(ticket)" class="update-button">Uppdatera Orsak</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="old-tickets">
+        <h2>Befintliga ärenden</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Orsakskod</th>
+                    <th>Tågnummer</th>
+                    <th>Datum</th>
+                    <th>Ny Orsakskod</th>
+                    <th>Uppdatera</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="ticket in tickets" :key="ticket.id">
+                    <td>{{ ticket.code }}</td>
+                    <td>{{ ticket.trainnumber }}</td>
+                    <td>{{ ticket.traindate }}</td>
+                    <td>
+                        <select v-model="ticket.selectedReasonCode" class="reason-code-select">
+                            <option v-for="code in reasonCodes" :key="code.Code" :value="code.Code">
+                                {{ code.Code }} - {{ code.Level3Description }}
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <button @click="updateTicketReason(ticket)" class="update-button">Uppdatera Orsak</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <script setup>
@@ -40,11 +40,10 @@ const emits = defineEmits(['ticket-updated']);
 const updateTicketReason = (ticket) => {
     if (!ticket.selectedReasonCode) return;
     const updatedTicket = {
-        ...ticket,
         code: ticket.selectedReasonCode,
     };
 
-    fetch(`${backend}/tickets/${ticket.id}`, {
+    fetch(`${backend}/tickets/${ticket._id}`, {
         body: JSON.stringify(updatedTicket),
         headers: {
             'content-type': 'application/json'
@@ -65,10 +64,11 @@ const updateTicketReason = (ticket) => {
     border-radius: 4px;
     overflow: hidden;
 }
+
 .old-tickets table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; 
+    table-layout: fixed;
 }
 
 .old-tickets th:nth-child(1),
@@ -113,7 +113,7 @@ const updateTicketReason = (ticket) => {
     border-collapse: collapse;
 }
 
-.old-tickets th, 
+.old-tickets th,
 .old-tickets td {
     padding: 8px 12px;
     border-bottom: 1px solid #ddd;

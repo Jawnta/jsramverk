@@ -19,8 +19,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { defineProps } from 'vue';
-import { defineEmits } from 'vue';
+
 import { useTrainStore } from '../stores/train.js'
 const router = useRouter()
 const selectedReasonCode = ref(null);
