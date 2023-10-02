@@ -24,7 +24,13 @@ const router = createRouter({
         },
         {
             path: '/details/:trainNumber/edit',
-            name: 'details',
+            name: 'edit',
+            component: trainDetailView,
+            props: true
+        },
+        {
+            path: '/details/:trainNumber/edit/:ticketId',
+            name: 'editTicket',
             component: trainDetailView,
             props: true
         }

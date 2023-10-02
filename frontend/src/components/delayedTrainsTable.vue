@@ -39,7 +39,6 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { defineProps } from 'vue';
 import { useTrainStore } from '../stores/train.js'
 const router = useRouter()
 const trainStore = useTrainStore()

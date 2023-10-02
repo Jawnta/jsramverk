@@ -1,23 +1,21 @@
 <template>
     <div class="ticket">
         <a @click.prevent="renderMainView">« Tillbaka</a>
-        <h1>Nytt ärende #{{ newTicketId }}</h1>
-        <h3 v-if="locationString">{{ locationString }}</h3>
-        <p><strong>Försenad:</strong> {{ outputDelay() }}</p>
-        <form @submit.prevent="submitNewTicket">
+        <h1>Redigera ärende #{{ ticket[0]._id }}</h1>
+        <form @submit.prevent="updateTicketReason(ticket[0])">
             <label>Orsakskod</label><br />
             <select v-model="selectedReasonCode">
                 <option v-for="code in reasonCodes" :key="code.Code" :value="code.Code">
                     {{ code.Code }} - {{ code.Level3Description }}
                 </option>
             </select><br /><br />
-            <input type="submit" value="Skapa nytt ärende" />
+            <input type="submit" value="Uppdatera nytt ärende" />
         </form>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useTrainStore } from '../stores/train.js'
@@ -27,8 +25,8 @@ const trainStore = useTrainStore()
 const backend = import.meta.env.VITE_BACKEND_URL
 const train = ref({})
 const emits = defineEmits(['ticket-created']);
-const { newTicketId, reasonCodes } = defineProps({
-    newTicketId: String || Number,
+const { ticket, reasonCodes } = defineProps({
+    ticket: Object,
     reasonCodes: Array,
 })
 onMounted(() => {
@@ -39,37 +37,26 @@ const renderMainView = () => {
         name: 'home'
     })
 }
-const locationString = computed(() => {
-    if (train.value.FromLocation) {
-        return `Tåg från ${train.value.FromLocation[0].LocationName} till ${train.value.ToLocation[0].LocationName}. Just nu i ${train.value.LocationSignature}.`
-    }
-    return ''
-})
-const outputDelay = () => {
-    const advertised = new Date(train.value.AdvertisedTimeAtLocation)
-    const estimated = new Date(train.value.EstimatedTimeAtLocation)
-    const diffInMinutes = Math.floor(Math.abs(estimated - advertised) / (1000 * 60))
-    return `${diffInMinutes} minuter`
-}
 
-const submitNewTicket = () => {
-    const newTicket = {
+const updateTicketReason = (currentTicket) => {
+    console.log("??")
+    console.log(currentTicket)
+    if (!selectedReasonCode.value) return;
+    const updatedTicket = {
         code: selectedReasonCode.value,
-        trainnumber: train.value.OperationalTrainNumber,
-        traindate: train.value.EstimatedTimeAtLocation.substring(0, 10)
-    }
-
-    fetch(`${backend}/tickets`, {
-        body: JSON.stringify(newTicket),
+    };
+    console.log("inte denna")
+    fetch(`${backend}/tickets/${currentTicket._id}`, {
+        body: JSON.stringify(updatedTicket),
         headers: {
             'content-type': 'application/json'
         },
-        method: 'POST'
+        method: 'PUT'
     })
         .then((response) => response.json())
         .then(() => {
-            emits('ticket-created');
-        })
+            emits('ticket-updated');
+        });
 }
 
 </script>
