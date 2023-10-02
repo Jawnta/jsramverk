@@ -1,26 +1,33 @@
 <template>
-    <div class="ticket-container">
+    <div class="ticket-container" v-if="!isLocked">
         <NewTicketForm v-if="newTicketId" :newTicketId="newTicketId" :reasonCodes="reasonCodes"
             @ticket-created="fetchTickets" />
         <ExistingTickets v-if="tickets" :tickets="filteredTickets" :reasonCodes="reasonCodes"
             @ticket-updated="fetchTickets" />
     </div>
+    <div v-if="isLocked">
+        <h1>Det är redan någon som redigerar ärenden för detta tåg.</h1>
+    </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { io } from 'socket.io-client'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router';
 const route = useRoute();
 import ExistingTickets from './existingTickets.vue';
 import NewTicketForm from './newTicketForm.vue';
+
 const backend = import.meta.env.VITE_BACKEND_URL
 const tickets = ref([])
 const reasonCodes = ref([])
 const newTicketId = ref(0)
+const socket = ref(null)
+const isLocked = ref(false)
 const trainNumber = route.params.trainNumber
 const filteredTickets = computed(() => {
     return tickets.value.filter(ticket => ticket.trainnumber === trainNumber);
-}); // use computed to create a reactive filtered list
+});
 
 const fetchTickets = async () => {
     try {
@@ -34,6 +41,13 @@ const fetchTickets = async () => {
     }
 };
 
+onBeforeUnmount(() => {
+    // Disconnect the socket before unmounting the component
+    if (socket.value) {
+        socket.value.disconnect()
+    }
+})
+
 const fetchReasonCodes = async () => {
     try {
         const response = await fetch(`${backend}/codes`);
@@ -46,8 +60,17 @@ const fetchReasonCodes = async () => {
 
 };
 
+const openSocket = async () => {
+    socket.value = io(`${backend}/tickets`)
+    socket.value.emit('ticketLocked', trainNumber);
+    socket.value.on('connectionError', () => {
+        isLocked.value = true
+    });
+};
+
 
 onMounted(async () => {
+    await openSocket()
     await fetchTickets()
     await fetchReasonCodes()
 })
