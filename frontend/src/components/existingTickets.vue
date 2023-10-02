@@ -34,9 +34,11 @@
 
 <script setup>
 import { defineProps } from 'vue';
+
 const backend = import.meta.env.VITE_BACKEND_URL
 const { tickets, reasonCodes } = defineProps(['tickets', 'reasonCodes']);
 const emits = defineEmits(['ticket-updated']);
+
 const updateTicketReason = (ticket) => {
     if (!ticket.selectedReasonCode) return;
     const updatedTicket = {
@@ -55,6 +57,9 @@ const updateTicketReason = (ticket) => {
             emits('ticket-updated');
         });
 }
+
+
+
 </script>
 
 <style scoped>

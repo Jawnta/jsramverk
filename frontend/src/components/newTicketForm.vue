@@ -2,7 +2,7 @@
     <div class="ticket">
         <a @click.prevent="renderMainView">« Tillbaka</a>
         <h1>Nytt ärende #{{ newTicketId }}</h1>
-        <h3 v-if="locationString">{{ locationString }} - SKA VARA HÄR</h3>
+        <h3 v-if="locationString">{{ locationString }}</h3>
         <p><strong>Försenad:</strong> {{ outputDelay() }}</p>
         <form @submit.prevent="submitNewTicket">
             <label>Orsakskod</label><br />

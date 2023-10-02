@@ -1,27 +1,19 @@
 <template>
     <div class="ticket-container">
-        <NewTicketForm v-if="newTicketId" :newTicketId="newTicketId" :reasonCodes="reasonCodes"
-            @ticket-created="fetchTickets" />
-        <ExistingTickets v-if="tickets" :tickets="filteredTickets" :reasonCodes="reasonCodes"
-            @ticket-updated="fetchTickets" />
+        <a @click.prevent="renderMainView">« Tillbaka</a>
+        <ExistingTickets v-if="tickets" :tickets="tickets" :reasonCodes="reasonCodes" @ticket-updated="fetchTickets" />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router';
-const route = useRoute();
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import ExistingTickets from './existingTickets.vue';
-import NewTicketForm from './newTicketForm.vue';
 const backend = import.meta.env.VITE_BACKEND_URL
 const tickets = ref([])
 const reasonCodes = ref([])
 const newTicketId = ref(0)
-const trainNumber = route.params.trainNumber
-const filteredTickets = computed(() => {
-    return tickets.value.filter(ticket => ticket.trainnumber === trainNumber);
-}); // use computed to create a reactive filtered list
-
+const router = useRouter()
 const fetchTickets = async () => {
     try {
         const response = await fetch(`${backend}/tickets`);
@@ -51,5 +43,11 @@ onMounted(async () => {
     await fetchTickets()
     await fetchReasonCodes()
 })
+
+const renderMainView = () => {
+    router.push({
+        name: 'home'
+    })
+}
 </script>
 
