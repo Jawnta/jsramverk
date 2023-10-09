@@ -14,10 +14,14 @@ const tickets = ref([])
 const reasonCodes = ref([])
 const newTicketId = ref(0)
 const router = useRouter()
+import axios from 'axios';
+
 const fetchTickets = async () => {
     try {
-        const response = await fetch(`${backend}/tickets`);
-        const result = await response.json();
+        const response = await axios.get(`${backend}/tickets`, {
+            withCredentials: true,
+        });
+        const result = response.data;
         tickets.value = result.data;
         const lastId = tickets.value[1] ? tickets.value[1]._id : 0;
         newTicketId.value = lastId + 1;
@@ -25,6 +29,7 @@ const fetchTickets = async () => {
         console.error('Error fetching reason codes:', error);
     }
 };
+
 
 const fetchReasonCodes = async () => {
     try {

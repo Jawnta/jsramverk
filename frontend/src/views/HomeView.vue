@@ -8,6 +8,11 @@
             <mapComponentVue data-testid="mapComponentVue" />
         </div>
     </div>
+    <form @submit.prevent>
+        <input type="text" v-model="email" placeholder="Email">
+        <input type="text" v-model="pw" placeholder="Password">
+        <button @click="registerUser()">Register</button>
+    </form>
 </template>
 
 <script setup>
@@ -17,7 +22,8 @@ import { useTrainStore } from '../stores/train.js'
 import { ref, onMounted } from 'vue';
 const trainStore = useTrainStore()
 const backend = import.meta.env.VITE_BACKEND_URL
-
+let email;
+let pw;
 const delayedTrains = ref([])
 const isloaded = ref(false)
 onMounted(async () => {
@@ -30,11 +36,48 @@ const fetchDelayedTrains = async () => {
     const result = await response.json()
     delayedTrains.value = result.data
 }
+// In your Vue component or function
+import axios from 'axios';
+
+async function registerUser() {
+    const url = 'http://109.228.158.227:8888/auth/login';
+    const data = {
+        email: 'jawntalol@gmail.com',
+        password: 'asd123'
+    };
+
+    try {
+        const response = await axios.post(url, data, {
+            withCredentials: true,  // Include credentials (cookies) in the request
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = response.data;
+        console.log(result);
+    } catch (error) {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.error('Application error:', error.response.data);
+        } else if (error.request) {
+            // The request was made but no response was received
+            console.error('No response received:', error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error', error.message);
+        }
+    }
+}
+
+
+
 
 const setDelayedTrains = () => {
 
-const operationalTrainNumbers = delayedTrains.value.map(train => train.OperationalTrainNumber);
-trainStore.setDelayedTrains(operationalTrainNumbers)
+    const operationalTrainNumbers = delayedTrains.value.map(train => train.OperationalTrainNumber);
+    trainStore.setDelayedTrains(operationalTrainNumbers)
 };
 </script>
 
