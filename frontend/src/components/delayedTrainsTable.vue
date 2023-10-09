@@ -3,6 +3,7 @@
         <div class="delayed">
             <h1>Försenade tåg</h1>
             <button @click="resetSelectedTrain">Ta bort filter</button>
+            <button @click="allTickets">Visa alla ärenden</button>
             <table>
                 <thead>
                     <tr>
@@ -38,15 +39,14 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { defineProps } from 'vue';
 import { useTrainStore } from '../stores/train.js'
 const router = useRouter()
 const trainStore = useTrainStore()
 const { delayedTrains } = defineProps({
-  delayedTrains: {
-    type: Array,
-    default: () => [],
-  },
+    delayedTrains: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const resetSelectedTrain = () => {
@@ -72,6 +72,12 @@ const openTicketView = (train) => {
 const selectTrain = (train) => {
     trainStore.setFilter(true)
     trainStore.setTrain(train)
+};
+
+const allTickets = () => {
+    router.push({
+        name: 'tickets'
+    })
 };
 </script>
 

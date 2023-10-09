@@ -7,25 +7,28 @@
                     <th>Orsakskod</th>
                     <th>Tågnummer</th>
                     <th>Datum</th>
-                    <th>Ny Orsakskod</th>
-                    <th>Uppdatera</th>
+                    <th v-if="editMode">Orsakskod</th>
+                    <th v-if="editMode">Uppdatera</th>
+
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="ticket in tickets" :key="ticket.id">
+                <tr v-for="ticket in tickets" :key="ticket.id" @click="routeToTrainDetails(ticket)">
                     <td>{{ ticket.code }}</td>
                     <td>{{ ticket.trainnumber }}</td>
                     <td>{{ ticket.traindate }}</td>
-                    <td>
+
+                    <td v-if="editMode">
                         <select v-model="ticket.selectedReasonCode" class="reason-code-select">
                             <option v-for="code in reasonCodes" :key="code.Code" :value="code.Code">
                                 {{ code.Code }} - {{ code.Level3Description }}
                             </option>
                         </select>
                     </td>
-                    <td>
+                    <td v-if="editMode">
                         <button @click="updateTicketReason(ticket)" class="update-button">Uppdatera Orsak</button>
                     </td>
+
                 </tr>
             </tbody>
         </table>
@@ -33,10 +36,21 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const backend = import.meta.env.VITE_BACKEND_URL
-const { tickets, reasonCodes } = defineProps(['tickets', 'reasonCodes']);
+const { tickets, reasonCodes, editMode } = defineProps(['tickets', 'reasonCodes', 'editMode']);
+const routeToTrainDetails = (ticket) => {
+    console.log(ticket)
+    router.push({
+        name: 'editTicket',
+        params: { trainNumber: ticket.trainnumber, ticketId: ticket._id }
+    })
+
+}
+
 const emits = defineEmits(['ticket-updated']);
+
 const updateTicketReason = (ticket) => {
     if (!ticket.selectedReasonCode) return;
     const updatedTicket = {
@@ -55,6 +69,9 @@ const updateTicketReason = (ticket) => {
             emits('ticket-updated');
         });
 }
+
+
+
 </script>
 
 <style scoped>
