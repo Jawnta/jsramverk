@@ -10,12 +10,22 @@ const codes = require('./routes/codes.js')
 const ticketLock = require('./models/ticketGuard.js')
 const app = express()
 const httpServer = require('http').createServer(app)
+const auth = require('./routes/auth.js')
+const cookieParser = require('cookie-parser')
 
-app.use(cors())
-app.options('*', cors())
-
-app.disable('x-powered-by')
-
+app.use(
+    cors({
+        origin: [
+            'http://localhost:9000',
+            'http://109.228.158.227:9000',
+            'http://www.student.bth.se/~jorp21/editor/',
+            'https://www.student.bth.se/~jorp21/editor/'
+        ],
+        credentials: true
+    })
+)
+app.use(cookieParser())
+// app.disable('x-powered-by')
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
@@ -36,6 +46,7 @@ app.get('/', (req, res) => {
 app.use('/delayed', delayed)
 app.use('/tickets', tickets)
 app.use('/codes', codes)
+app.use('/auth', auth)
 ticketLock(io.of('/tickets'))
 httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
