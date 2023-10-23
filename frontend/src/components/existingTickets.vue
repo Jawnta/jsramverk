@@ -37,6 +37,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import axios from 'axios';
 const router = useRouter()
 const backend = import.meta.env.VITE_BACKEND_URL
 const { tickets, reasonCodes, editMode } = defineProps(['tickets', 'reasonCodes', 'editMode']);
@@ -51,24 +52,28 @@ const routeToTrainDetails = (ticket) => {
 
 const emits = defineEmits(['ticket-updated']);
 
-const updateTicketReason = (ticket) => {
+const updateTicketReason = async (ticket) => {
     if (!ticket.selectedReasonCode) return;
+
     const updatedTicket = {
         code: ticket.selectedReasonCode,
     };
 
-    fetch(`${backend}/tickets/${ticket._id}`, {
-        body: JSON.stringify(updatedTicket),
-        headers: {
-            'content-type': 'application/json'
-        },
-        method: 'PUT'
-    })
-        .then((response) => response.json())
-        .then(() => {
-            emits('ticket-updated');
+    try {
+        const response = await axios.put(`${backend}/tickets/${ticket._id}`, updatedTicket, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
         });
-}
+
+        if (response.status === 200) {
+            emits('ticket-updated');
+        }
+    } catch (error) {
+        console.error('Update error:', error);
+    }
+};
 
 
 

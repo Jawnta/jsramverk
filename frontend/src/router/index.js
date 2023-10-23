@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import allTickets from '../components/allTickets.vue'
 import trainDetailView from '../components/trainDetailView.vue'
-
+import loginPage from '../components/loginPage.vue'
+import registerPage from '../components/registerPage.vue'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -33,8 +34,26 @@ const router = createRouter({
             name: 'editTicket',
             component: trainDetailView,
             props: true
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: loginPage
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: registerPage
         }
     ]
+})
+
+router.beforeEach((to, from, next) => {
+    console.log(to, from, next)
+    next()
+    // const isAuthenticated = false // Replace with your own authentication check
+    // if (to.name !== 'login' && !isAuthenticated) next({ name: 'login' })
+    // else next()
 })
 
 export default router

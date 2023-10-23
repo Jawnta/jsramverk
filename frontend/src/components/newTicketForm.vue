@@ -19,7 +19,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
+import axios from 'axios';
 import { useTrainStore } from '../stores/train.js'
 const router = useRouter()
 const selectedReasonCode = ref(null);
@@ -52,25 +52,28 @@ const outputDelay = () => {
     return `${diffInMinutes} minuter`
 }
 
-const submitNewTicket = () => {
+const submitNewTicket = async () => {
     const newTicket = {
         code: selectedReasonCode.value,
         trainnumber: train.value.OperationalTrainNumber,
-        traindate: train.value.EstimatedTimeAtLocation.substring(0, 10)
-    }
+        traindate: train.value.EstimatedTimeAtLocation.substring(0, 10),
+    };
 
-    fetch(`${backend}/tickets`, {
-        body: JSON.stringify(newTicket),
-        headers: {
-            'content-type': 'application/json'
-        },
-        method: 'POST'
-    })
-        .then((response) => response.json())
-        .then(() => {
-            emits('ticket-created');
-        })
-}
+    try {
+        await axios.post(`${backend}/tickets`, newTicket, {
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            withCredentials: true
+        });
+
+        emits('ticket-created');
+
+    } catch (error) {
+        console.error('Error creating new ticket:', error);
+    }
+};
 
 </script>
 

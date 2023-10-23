@@ -48,7 +48,7 @@ async function registerUser() {
 
     try {
         const response = await axios.post(url, data, {
-            withCredentials: true,  // Include credentials (cookies) in the request
+            withCredentials: true,
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -58,14 +58,10 @@ async function registerUser() {
         console.log(result);
     } catch (error) {
         if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             console.error('Application error:', error.response.data);
         } else if (error.request) {
-            // The request was made but no response was received
             console.error('No response received:', error.request);
         } else {
-            // Something happened in setting up the request that triggered an Error
             console.error('Error', error.message);
         }
     }
