@@ -33,14 +33,14 @@ const fetchTickets = async () => {
 
 const fetchReasonCodes = async () => {
     try {
-        const response = await fetch(`${backend}/codes`);
-        const result = await response.json();
+        const response = await axios.get(`${backend}/codes`, {
+            withCredentials: true,
+        });
+        const result = response.data;
         reasonCodes.value = result.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error fetching reason codes:', error);
     }
-
 };
 
 

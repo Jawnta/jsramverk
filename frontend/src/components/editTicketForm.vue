@@ -17,7 +17,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
+import axios from 'axios';
 import { useTrainStore } from '../stores/train.js'
 const router = useRouter()
 const selectedReasonCode = ref(null);
@@ -38,26 +38,30 @@ const renderMainView = () => {
     })
 }
 
-const updateTicketReason = (currentTicket) => {
-    console.log("??")
-    console.log(currentTicket)
-    if (!selectedReasonCode.value) return;
+
+
+const updateTicketReason = async (currentTicket, selectedReasonCode) => {
+    if (!selectedReasonCode) return;
+
     const updatedTicket = {
-        code: selectedReasonCode.value,
+        code: selectedReasonCode,
     };
-    console.log("inte denna")
-    fetch(`${backend}/tickets/${currentTicket._id}`, {
-        body: JSON.stringify(updatedTicket),
-        headers: {
-            'content-type': 'application/json'
-        },
-        method: 'PUT'
-    })
-        .then((response) => response.json())
-        .then(() => {
-            emits('ticket-updated');
+
+    try {
+        const response = await axios.put(`${backend}/tickets/${currentTicket._id}`, updatedTicket, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
         });
-}
+        if (response.status === 200) {
+            emits('ticket-updated');
+        }
+    } catch (error) {
+        console.error('Update error:', error);
+    }
+};
+
 
 </script>
 

@@ -16,6 +16,7 @@
 import { io } from 'socket.io-client'
 import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router';
+import axios from 'axios';
 const route = useRoute();
 import ExistingTickets from './existingTickets.vue';
 import NewTicketForm from './newTicketForm.vue';
@@ -30,16 +31,17 @@ const trainNumber = route.params.trainNumber
 const ticketId = ref("")
 const filteredTickets = computed(() => {
     return tickets.value.filter(ticket => ticket.trainnumber === trainNumber);
-}); // use computed to create a reactive filtered list
+});
 const selectedTicket = computed(() => {
     return tickets.value.filter(ticket => ticket._id === ticketId.value);
-}); // use computed to create a reactive filtered list
+});
 
 const fetchTickets = async () => {
     try {
-        const response = await fetch(`${backend}/tickets`);
-        const result = await response.json();
-        tickets.value = result.data;
+        const response = await axios.get(`${backend}/tickets`, {
+            withCredentials: true,
+        });
+        tickets.value = response.data.data;
         const lastId = tickets.value[1] ? tickets.value[1]._id : 0;
         newTicketId.value = lastId + 1;
     } catch (error) {
@@ -47,8 +49,8 @@ const fetchTickets = async () => {
     }
 };
 
+
 onBeforeUnmount(() => {
-    // Disconnect the socket before unmounting the component
     if (socket.value) {
         socket.value.disconnect()
     }
