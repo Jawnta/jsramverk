@@ -4,6 +4,7 @@ import allTickets from '../components/allTickets.vue'
 import trainDetailView from '../components/trainDetailView.vue'
 import loginPage from '../components/loginPage.vue'
 import registerPage from '../components/registerPage.vue'
+import Cookies from 'js-cookie'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -49,11 +50,18 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(to, from, next)
-    next()
-    // const isAuthenticated = false // Replace with your own authentication check
-    // if (to.name !== 'login' && !isAuthenticated) next({ name: 'login' })
-    // else next()
+    const jwtCookie = Cookies.get('jwt')
+    let isAuthenticated = false
+
+    if (jwtCookie) {
+        isAuthenticated = true
+    }
+
+    if (to.name !== 'login' && to.name !== 'register' && !isAuthenticated) {
+        next({ name: 'login' })
+    } else {
+        next()
+    }
 })
 
 export default router

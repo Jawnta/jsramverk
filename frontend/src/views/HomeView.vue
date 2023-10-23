@@ -1,5 +1,7 @@
 <template>
+    <button @click="logOut()">Logga ut</button>
     <div class="wrapper">
+
         <div class="trainList">
             <trainsTable data-testid="trainsTableComponent" :delayedTrains="delayedTrains" />
         </div>
@@ -8,11 +10,6 @@
             <mapComponentVue data-testid="mapComponentVue" />
         </div>
     </div>
-    <form @submit.prevent>
-        <input type="text" v-model="email" placeholder="Email">
-        <input type="text" v-model="pw" placeholder="Password">
-        <button @click="registerUser()">Register</button>
-    </form>
 </template>
 
 <script setup>
@@ -20,10 +17,11 @@ import mapComponentVue from '../components/mapComponent.vue'
 import trainsTable from '../components/delayedTrainsTable.vue'
 import { useTrainStore } from '../stores/train.js'
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const trainStore = useTrainStore()
 const backend = import.meta.env.VITE_BACKEND_URL
-let email;
-let pw;
 const delayedTrains = ref([])
 const isloaded = ref(false)
 onMounted(async () => {
@@ -36,37 +34,12 @@ const fetchDelayedTrains = async () => {
     const result = await response.json()
     delayedTrains.value = result.data
 }
-// In your Vue component or function
-import axios from 'axios';
 
-async function registerUser() {
-    const url = 'http://109.228.158.227:8888/auth/login';
-    const data = {
-        email: 'jawntalol@gmail.com',
-        password: 'asd123'
-    };
+const logOut = async () => {
+    await axios.get(`${backend}/auth/logout`, { withCredentials: true });
+    router.push({ name: "login" })
 
-    try {
-        const response = await axios.post(url, data, {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const result = response.data;
-        console.log(result);
-    } catch (error) {
-        if (error.response) {
-            console.error('Application error:', error.response.data);
-        } else if (error.request) {
-            console.error('No response received:', error.request);
-        } else {
-            console.error('Error', error.message);
-        }
-    }
-}
-
+};
 
 
 

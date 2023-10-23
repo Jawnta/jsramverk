@@ -5,7 +5,12 @@
             <input type="text" v-model="email" placeholder="Email" />
             <input type="password" v-model="password" placeholder="Password" />
             <button @click="handleLogin">Login</button>
+            <p>Inget konto? <router-link to="/register">Registrera dig här</router-link></p>
         </div>
+        <div>
+
+        </div>
+
     </div>
 </template>
   
