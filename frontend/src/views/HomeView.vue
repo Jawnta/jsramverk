@@ -3,11 +3,11 @@
     <div class="wrapper">
 
         <div class="trainList">
-            <trainsTable data-testid="trainsTableComponent" :delayedTrains="delayedTrains" />
+            <trainsTable data-testid="trainsTableComponent" :delayedTrains="filteredTrains" @reset-filter="resetTrains" @setSpecificTrain="setSpecificTrain"/>
         </div>
 
         <div class="map" v-if="isloaded">
-            <mapComponentVue data-testid="mapComponentVue" />
+            <mapComponentVue data-testid="mapComponentVue" @marker-clicked="setSpecificTrain" />
         </div>
     </div>
 </template>
@@ -23,6 +23,7 @@ const router = useRouter()
 const trainStore = useTrainStore()
 const backend = import.meta.env.VITE_BACKEND_URL
 const delayedTrains = ref([])
+const filteredTrains = ref([])
 const isloaded = ref(false)
 onMounted(async () => {
     await fetchDelayedTrains()
@@ -33,18 +34,27 @@ const fetchDelayedTrains = async () => {
     const response = await fetch(`${backend}/delayed`)
     const result = await response.json()
     delayedTrains.value = result.data
+    filteredTrains.value = result.data
+}
+
+const resetTrains =  () => {
+    filteredTrains.value = delayedTrains.value
 }
 
 const logOut = async () => {
     await axios.get(`${backend}/auth/logout`, { withCredentials: true });
+    localStorage.clear("isAuthenticated")
     router.push({ name: "login" })
 
 };
 
-
+const setSpecificTrain = () => {
+    const trainNumber = trainStore.currentTrain.OperationalTrainNumber
+    const trainToShow = filteredTrains.value.find(train => train.OperationalTrainNumber === trainNumber)
+    filteredTrains.value = [trainToShow]
+};
 
 const setDelayedTrains = () => {
-
     const operationalTrainNumbers = delayedTrains.value.map(train => train.OperationalTrainNumber);
     trainStore.setDelayedTrains(operationalTrainNumbers)
 };

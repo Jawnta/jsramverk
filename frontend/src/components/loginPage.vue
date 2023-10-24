@@ -36,6 +36,7 @@ const login = async () => {
         });
 
         if (response.status === 201) {
+            localStorage.setItem('isAuthenticated', "true")
             router.push({
                 name: 'home'
             })

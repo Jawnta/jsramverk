@@ -1,12 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import allTickets from '../components/allTickets.vue'
 import trainDetailView from '../components/trainDetailView.vue'
 import loginPage from '../components/loginPage.vue'
 import registerPage from '../components/registerPage.vue'
-import Cookies from 'js-cookie'
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/',
@@ -50,12 +49,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const jwtCookie = Cookies.get('jwt')
-    let isAuthenticated = false
 
-    if (jwtCookie) {
-        isAuthenticated = true
-    }
+    const isAuthenticated = localStorage.getItem("isAuthenticated") || false
 
     if (to.name !== 'login' && to.name !== 'register' && !isAuthenticated) {
         next({ name: 'login' })

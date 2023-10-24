@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch, defineEmits } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { io } from 'socket.io-client'
@@ -20,7 +20,7 @@ const backend = import.meta.env.VITE_BACKEND_URL
 const delayedTrainNumbers = ref( trainStore.delayedTrains || [])
 const trainsPositions = ref([])
 const uniqueTrains = ref([]);
-
+const emit = defineEmits(['markerClicked'])
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'leaflet/dist/images/marker-icon-2x.png',
     iconUrl: markerIconUrl,
@@ -84,6 +84,7 @@ const initializeMarkers = async () => {
             .on('click', () => {
                 trainStore.setFilter(true)
                 trainStore.setTrain(element.Train)
+                emit('markerClicked')
             })
             .bindPopup(element.Train.OperationalTrainNumber);
         trainStore.setMarkers(marker)

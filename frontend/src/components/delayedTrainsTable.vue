@@ -41,6 +41,7 @@ import { useRouter } from 'vue-router'
 import { useTrainStore } from '../stores/train.js'
 const router = useRouter()
 const trainStore = useTrainStore()
+const emit = defineEmits(['resetFilter', 'setSpecificTrain'])
 const { delayedTrains } = defineProps({
     delayedTrains: {
         type: Array,
@@ -50,6 +51,8 @@ const { delayedTrains } = defineProps({
 
 const resetSelectedTrain = () => {
     trainStore.setFilter(false)
+    emit('resetFilter', true)
+    
 }
 
 
@@ -71,6 +74,7 @@ const openTicketView = (train) => {
 const selectTrain = (train) => {
     trainStore.setFilter(true)
     trainStore.setTrain(train)
+    emit('setSpecificTrain', true)
 };
 
 const allTickets = () => {
