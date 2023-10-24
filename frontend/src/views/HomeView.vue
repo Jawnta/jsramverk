@@ -37,6 +37,7 @@ const fetchDelayedTrains = async () => {
 
 const logOut = async () => {
     await axios.get(`${backend}/auth/logout`, { withCredentials: true });
+    localStorage.clear("isAuthenticated")
     router.push({ name: "login" })
 
 };
