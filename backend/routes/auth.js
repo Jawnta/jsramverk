@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
             maxAge: sixDaysInMilliseconds,
             path: '/',
-            secure: false,
+            secure: true,
             sameSite: 'none'
         })
 
