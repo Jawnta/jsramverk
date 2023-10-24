@@ -50,7 +50,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 
-    const isAuthenticated = localStorage.getItem("isAuthenticated") || false
+    const isAuthenticated = localStorage.getItem('isAuthenticated') || false
 
     if (to.name !== 'login' && to.name !== 'register' && !isAuthenticated) {
         next({ name: 'login' })

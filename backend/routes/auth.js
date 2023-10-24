@@ -13,10 +13,11 @@ router.post('/register', async (req, res) => {
         }
         const token = await register.registerLocalUser(userData)
         res.cookie('jwt', token, {
-            httpOnly: false,
+            httpOnly: true,
             maxAge: sixDaysInMilliseconds,
             path: '/',
-            secure: false
+            secure: true,
+            sameSite: 'none'
         })
 
         res.status(201).json({ message: 'User registered successfully' })
@@ -36,10 +37,11 @@ router.post('/login', async (req, res) => {
         const user = userModel.getUser(userData.email)
         const token = encrypt.signToken(user)
         res.cookie('jwt', token, {
-            httpOnly: false,
+            httpOnly: true,
             maxAge: sixDaysInMilliseconds,
             path: '/',
-            secure: false
+            secure: true,
+            sameSite: 'none'
         })
 
         res.status(201).json({ message: 'User login successfully' })

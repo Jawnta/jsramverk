@@ -15,12 +15,7 @@ const cookieParser = require('cookie-parser')
 
 app.use(
     cors({
-        origin: [
-            'http://localhost:9000',
-            'http://109.228.158.227:9000',
-            'http://www.student.bth.se/~jorp21/editor/',
-            'https://www.student.bth.se/~jorp21/editor/'
-        ],
+        origin: ['https://109.228.158.227:9000', 'https://www.student.bth.se'],
         credentials: true
     })
 )
