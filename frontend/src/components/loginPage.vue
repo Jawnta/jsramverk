@@ -4,7 +4,7 @@
             <h2>Login</h2>
             <input type="text" v-model="email" placeholder="Email" />
             <input type="password" v-model="password" placeholder="Password" />
-            <button @click="handleLogin">Login</button>
+            <button @click="handleLogin()">Login</button>
             <p>Inget konto? <router-link to="/register">Registrera dig här</router-link></p>
         </div>
         <div>
@@ -36,6 +36,7 @@ const login = async () => {
         });
 
         if (response.status === 201) {
+            localStorage.setItem('isAuthenticated', 'true');
             router.push({
                 name: 'home'
             })
